@@ -22,9 +22,9 @@ function init() {
                     color: [25, 235, 75, 0.3]
                 }),
                 points: 5,
-                radius1: 5,
-                radius2: 8,
-                rotation: Math.PI
+                radius1: 8,
+                radius2: 5,
+                //rotation: Math.PI
             })
         })
     });

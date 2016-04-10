@@ -170,7 +170,7 @@ layerTree.prototype.addBufferIcon = function (layer) {
                 layerElem.className = layerElem.className.replace(/(?:^|\s)(error|buffering)(?!\S)/g, '');
                 break;
             case 'error':
-                layerElem.className += ' error'
+                layerElem.className += ' error';
                 break;
             default:
                 layerElem.className += ' buffering';
@@ -304,29 +304,35 @@ layerTree.prototype.addWfsLayer = function (form) {
 layerTree.prototype.addVectorLayer = function (form) {
     var file = form.file.files[0];
     var currentProj = this.map.getView().getProjection();
-    var fr = new FileReader();
-    var sourceFormat = new ol.format.GeoJSON();
-    var source = new ol.source.Vector();
-    fr.onload = function (evt) {
-        var vectorData = evt.target.result;
-        var dataProjection = form.projection.value || sourceFormat.readProjection(vectorData) || currentProj;
-        shp(vectorData).then(function (geojson) {
-            source.addFeatures(sourceFormat.readFeatures(geojson, {
-                dataProjection: dataProjection,
-                featureProjection: currentProj
-            }));
+    try {
+        var fr = new FileReader();
+        var sourceFormat = new ol.format.GeoJSON();
+        var source = new ol.source.Vector();
+        fr.onload = function (evt) {
+            var vectorData = evt.target.result;
+            var dataProjection = form.projection.value || sourceFormat.readProjection(vectorData) || currentProj;
+            shp(vectorData).then(function (geojson) {
+                source.addFeatures(sourceFormat.readFeatures(geojson, {
+                    dataProjection: dataProjection,
+                    featureProjection: currentProj
+                }));
+            });
+        };
+        fr.readAsArrayBuffer(file);
+        var layer = new ol.layer.Vector({
+            source: source,
+            name: form.displayname.value,
+            strategy: ol.loadingstrategy.bbox
         });
-    };
-    fr.readAsArrayBuffer(file);
-    var layer = new ol.layer.Vector({
-        source: source,
-        name: form.displayname.value,
-        strategy: ol.loadingstrategy.bbox
-    });
-    this.addBufferIcon(layer);
-    this.map.addLayer(layer);
-    this.messages.textContent = 'Vector layer added successfully.';
-    return this;
+        this.addBufferIcon(layer);
+        this.map.addLayer(layer);
+        this.messages.textContent = 'Vector layer added successfully.';
+        return this;
+    } catch (error) {
+        this.messages.textContent = 'Some unexpected error occurred: (' + error.message + ').';
+        return error;
+    }
+
 };
 
 layerTree.prototype.addSelectEvent = function (node, isChild) {

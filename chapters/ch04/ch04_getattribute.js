@@ -186,7 +186,7 @@ layerTree.prototype.addBufferIcon = function (layer) {
                 layerElem.className = layerElem.className.replace(/(?:^|\s)(error|buffering)(?!\S)/g, '');
                 break;
             case 'error':
-                layerElem.className += ' error'
+                layerElem.className += ' error';
                 break;
             default:
                 layerElem.className += ' buffering';
@@ -253,7 +253,7 @@ layerTree.prototype.checkWmsLayer = function (form) {
     };
     url = /\?/.test(url) ? url + '&' : url + '?';
     url = url + 'REQUEST=GetCapabilities&SERVICE=WMS';
-    request.open('GET', '../../../cgi-bin/proxy.py?' + encodeURIComponent(url), true);
+    request.open('GET', '../../../cgi-bin/proxy.py?url=' + encodeURIComponent(url), true);
     //request.open('GET', url, true);
     request.send();
 };
@@ -304,7 +304,7 @@ layerTree.prototype.addWfsLayer = function (form) {
         }
     };
     url = url + 'SERVICE=WFS&REQUEST=GetFeature&TYPENAME=' + typeName + '&VERSION=1.1.0&SRSNAME=' + proj;
-    request.open('GET', '../../../cgi-bin/proxy.py?' + encodeURIComponent(url));
+    request.open('GET', '../../../cgi-bin/proxy.py?url=' + encodeURIComponent(url));
     //request.open('GET', url);
     request.send();
     var layer = new ol.layer.Vector({

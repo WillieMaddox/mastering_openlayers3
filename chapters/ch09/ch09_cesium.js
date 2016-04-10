@@ -237,8 +237,8 @@ layerTree.prototype.checkWmsLayer = function (form) {
         }
     };
     url = /\?/.test(url) ? url + '&' : url + '?';
-    request.open('GET', '../../../cgi-bin/proxy.py?' + url + 'REQUEST=GetCapabilities&SERVICE=WMS', true);
-    //request.open('GET', url + 'REQUEST=GetCapabilities&SERVICE=WMS', true);
+    //request.open('GET', '../../../cgi-bin/proxy.py?' + url + 'REQUEST=GetCapabilities&SERVICE=WMS', true);
+    request.open('GET', url + 'REQUEST=GetCapabilities&SERVICE=WMS', true);
     request.send();
 };
 
@@ -287,8 +287,8 @@ layerTree.prototype.addWfsLayer = function (form) {
             }));
         }
     };
-    request.open('GET', '../../../cgi-bin/proxy.py?' + url + 'SERVICE=WFS&REQUEST=GetFeature&TYPENAME=' + typeName + '&VERSION=1.1.0&SRSNAME=' + proj);
-    //request.open('GET', url + 'SERVICE=WFS&REQUEST=GetFeature&TYPENAME=' + typeName + '&VERSION=1.1.0&SRSNAME=' + proj);
+    //request.open('GET', '../../../cgi-bin/proxy.py?' + url + 'SERVICE=WFS&REQUEST=GetFeature&TYPENAME=' + typeName + '&VERSION=1.1.0&SRSNAME=' + proj);
+    request.open('GET', url + 'SERVICE=WFS&REQUEST=GetFeature&TYPENAME=' + typeName + '&VERSION=1.1.0&SRSNAME=' + proj);
     request.send();
     var layer = new ol.layer.Vector({
         source: source,

@@ -790,6 +790,15 @@ toolBar.prototype.addEditingToolBar = function () {
         })
     }).setDisabled(true);
     this.editingControls.push(dragFeature);
+    var transFeature = new ol.control.Interaction({
+        label: ' ',
+        tipLabel: 'Translate Features',
+        className: 'ol-transfeat ol-unselectable ol-control',
+        interaction: new ol.interaction.Translate({
+            features: this.activeFeatures
+        })
+    }).setDisabled(true);
+    this.editingControls.push(transFeature);
     layertree.selectEventEmitter.on('change', function () {
         var layer = layertree.getLayerById(layertree.selectedLayer.id);
         if (layer instanceof ol.layer.Vector) {
@@ -814,7 +823,7 @@ toolBar.prototype.addEditingToolBar = function () {
     }, this);
     this.addControl(drawPoint).addControl(drawLine).addControl(drawPolygon)
         .addControl(modifyFeature).addControl(snapFeature).addControl(removeFeature)
-        .addControl(dragFeature);
+        .addControl(dragFeature).addControl(transFeature);
     return this;
 };
 

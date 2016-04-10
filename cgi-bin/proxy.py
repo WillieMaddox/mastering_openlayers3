@@ -18,6 +18,8 @@ import sys, os
 
 method = os.environ["REQUEST_METHOD"]
 
+if not os.environ["QUERY_STRING"].startswith("http://") or not os.environ["QUERY_STRING"].startswith("https://"):
+    os.environ["QUERY_STRING"] = 'http:/'+os.environ["PATH_INFO"]+'?'+os.environ["QUERY_STRING"]
 if method == "POST":
     qs = os.environ["QUERY_STRING"]
     d = cgi.parse_qs(qs)
@@ -29,6 +31,17 @@ else:
     fs = cgi.FieldStorage()
     url = os.environ["QUERY_STRING"]
     url = urllib2.unquote(url)
+
+# if not url:
+#     print "Content-Type: text/plain"
+#     print
+#     # print os.environ["REQUEST_METHOD"]
+#     # print os.environ["QUERY_STRING"]
+#     # print os.environ["CONTENT_TYPE"]
+#     print fs
+#     # print os.environ
+#     # print ''.join(sorted([k+': '+v+'\n' for k, v in os.environ.iteritems()]))
+#     exit()
 
 try:
     if url.startswith("http://") or url.startswith("https://"):
@@ -52,7 +65,7 @@ try:
     else:
         print "Content-Type: text/plain"
         print
-        print "Illegal request."
+        print "Illegal request DICKS."
 except Exception, E:
     print "Status: 500 Unexpected Error"
     print "Content-Type: text/plain"
