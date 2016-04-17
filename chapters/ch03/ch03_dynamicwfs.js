@@ -183,7 +183,7 @@ layerTree.prototype.addWfsLayer = function (form) {
                 if (request.readyState === 4 && request.status === 200) {
                     _this.addFeatures(parser.readFeatures(request.responseText, {
                         dataProjection: proj,
-                        featureProjection: mapProj
+                        featureProjection: mapProj.getCode()
                     }));
                 }
             };
@@ -243,8 +243,11 @@ function init() {
             })
         ],
         view: new ol.View({
-            center: [0, 0],
-            zoom: 2
+            // center: ol.proj.transform([-73.9812, 40.6957], 'EPSG:4326', 'EPSG:3857'),
+	        center: [-8236600, 4975706],
+	        zoom: 14
+			// center: [0, 0],
+            // zoom: 2
         })
     });
     var tree = new layerTree({map: map, target: 'layertree', messages: 'messageBar'})

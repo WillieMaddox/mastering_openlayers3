@@ -325,7 +325,7 @@ layerTree.prototype.addWfsLayer = function (form) {
     url = /^((http)|(https))(:\/\/)/.test(url) ? url : 'http://' + url;
     url = /\?/.test(url) ? url + '&' : url + '?';
     var typeName = form.layer.value;
-    var mapProj = this.map.getView().getProjection().getCode();
+    var mapProj = this.map.getView().getProjection();
     var proj = form.projection.value || mapProj;
     var parser = new ol.format.WFS();
     var source = new ol.source.Vector({
@@ -576,8 +576,11 @@ function init() {
             })
         ],
         view: new ol.View({
-            center: [0, 0],
-            zoom: 2
+            // center: ol.proj.transform([-73.9812, 40.6957], 'EPSG:4326', 'EPSG:3857'),
+            center: [-8236600, 4975706],
+	        zoom: 14
+			// center: [0, 0],
+            // zoom: 2
         })
     });
 
@@ -603,7 +606,7 @@ function init() {
             var serializer = new XMLSerializer();
             var featString = serializer.serializeToString(featObject);
             var request = new XMLHttpRequest();
-            request.open('POST', 'myowsserver?SERVICE=WFS');
+            request.open('POST', 'geoserver/wfs?SERVICE=WFS');
             request.setRequestHeader('Content-Type', 'text/xml');
             request.send(featString);
         }

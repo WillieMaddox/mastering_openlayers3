@@ -16,10 +16,16 @@ import urllib2
 import cgi
 import sys, os
 
+ofs = open('proxy.log', 'w')
+
+ofs.write(os.environ["REQUEST_METHOD"]+'\n')
+ofs.write(os.environ["CONTENT_TYPE"]+'\n')
+ofs.write(os.environ["QUERY_STRING"]+'\n')
+
 method = os.environ["REQUEST_METHOD"]
 
-if not os.environ["QUERY_STRING"].startswith("http://") or not os.environ["QUERY_STRING"].startswith("https://"):
-    os.environ["QUERY_STRING"] = 'http:/'+os.environ["PATH_INFO"]+'?'+os.environ["QUERY_STRING"]
+# if not os.environ["QUERY_STRING"].startswith("http://") or not os.environ["QUERY_STRING"].startswith("https://"):
+#     os.environ["QUERY_STRING"] = 'http:/'+os.environ["PATH_INFO"]+'?'+os.environ["QUERY_STRING"]
 if method == "POST":
     qs = os.environ["QUERY_STRING"]
     d = cgi.parse_qs(qs)
@@ -28,20 +34,15 @@ if method == "POST":
     else:
         url = "http://www.openlayers.org"
 else:
-    fs = cgi.FieldStorage()
-    url = os.environ["QUERY_STRING"]
-    url = urllib2.unquote(url)
+    if os.environ["QUERY_STRING"].lower().startswith('url='):
+        fs = cgi.FieldStorage()
+        url = fs.getvalue('url', "http://www.openlayers.org")
+    else:
+        url = urllib2.unquote(os.environ["QUERY_STRING"])
 
-# if not url:
-#     print "Content-Type: text/plain"
-#     print
-#     # print os.environ["REQUEST_METHOD"]
-#     # print os.environ["QUERY_STRING"]
-#     # print os.environ["CONTENT_TYPE"]
-#     print fs
-#     # print os.environ
-#     # print ''.join(sorted([k+': '+v+'\n' for k, v in os.environ.iteritems()]))
-#     exit()
+ofs.write(url+'\n')
+ofs.write('\nos.environ')
+ofs.write(''.join(sorted([k+': '+v+'\n' for k, v in os.environ.iteritems()])))
 
 try:
     if url.startswith("http://") or url.startswith("https://"):
@@ -71,3 +72,5 @@ except Exception, E:
     print "Content-Type: text/plain"
     print 
     print "Some unexpected error occurred. Error text was:", E
+
+ofs.close()

@@ -196,7 +196,7 @@ layerTree.prototype.addWfsLayer = function (form) {
         }
     };
     url = url + 'SERVICE=WFS&REQUEST=GetFeature&TYPENAME=' + typeName + '&VERSION=1.1.0&SRSNAME=' + proj;
-    request.open('GET', '../../../cgi-bin/proxy.py?url=' + encodeURIComponent(url));
+    request.open('GET', '../../../cgi-bin/proxy.py?' + encodeURIComponent(url));
     //request.open('GET', url);
     request.send();
     var layer = new ol.layer.Vector({
@@ -249,8 +249,11 @@ function init() {
             })
         ],
         view: new ol.View({
-            center: [0, 0],
-            zoom: 2
+			// center: ol.proj.transform([-73.9812, 40.6957], 'EPSG:4326', 'EPSG:3857'),
+	        center: [-8236600, 4975706],
+	        zoom: 14
+			// center: [0, 0],
+            // zoom: 2
         })
     });
     var tree = new layerTree({map: map, target: 'layertree', messages: 'messageBar'})
