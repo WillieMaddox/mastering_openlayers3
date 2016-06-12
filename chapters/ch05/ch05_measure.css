@@ -249,9 +249,6 @@ body {
 .toolbar .ol-dragfeat button {
     background-image: url(../../res/button_dragfeat.png);
 }
-.toolbar .ol-transfeat button {
-    background-image: url(../../res/button_dragfeat.png);
-}
 .toolbar .ol-measure button {
     background-image: url(../../res/button_measure.png);
 }

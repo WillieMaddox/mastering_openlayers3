@@ -226,6 +226,7 @@ layerTree.prototype.addBufferIcon = function (layer) {
         switch (evt.target.getState()) {
             case 'ready':
                 layerElem.className = layerElem.className.replace(/(?:^|\s)(error|buffering)(?!\S)/g, '');
+                layer.buildHeaders();
                 break;
             case 'error':
                 layerElem.className += ' error'
@@ -448,13 +449,16 @@ layerTree.prototype.stopPropagationOnEvent = function (node, event) {
 };
 
 ol.layer.Vector.prototype.buildHeaders = function () {
-    var headers = this.get('headers') || {};
+    var oldHeaders = this.get('headers') || {};
+    var headers = {};
     var features = this.getSource().getFeatures();
     for (var i = 0; i < features.length; i += 1) {
         var attributes = features[i].getProperties();
         for (var j in attributes) {
             if (typeof attributes[j] !== 'object' && !(j in headers)) {
                 headers[j] = 'string';
+            } else if (j in oldHeaders) {
+                headers[j] = oldHeaders[j];
             }
         }
     }
@@ -790,15 +794,6 @@ toolBar.prototype.addEditingToolBar = function () {
         })
     }).setDisabled(true);
     this.editingControls.push(dragFeature);
-    var transFeature = new ol.control.Interaction({
-        label: ' ',
-        tipLabel: 'Translate Features',
-        className: 'ol-transfeat ol-unselectable ol-control',
-        interaction: new ol.interaction.Translate({
-            features: this.activeFeatures
-        })
-    }).setDisabled(true);
-    this.editingControls.push(transFeature);
     layertree.selectEventEmitter.on('change', function () {
         var layer = layertree.getLayerById(layertree.selectedLayer.id);
         if (layer instanceof ol.layer.Vector) {
@@ -823,7 +818,7 @@ toolBar.prototype.addEditingToolBar = function () {
     }, this);
     this.addControl(drawPoint).addControl(drawLine).addControl(drawPolygon)
         .addControl(modifyFeature).addControl(snapFeature).addControl(removeFeature)
-        .addControl(dragFeature).addControl(transFeature);
+        .addControl(dragFeature);
     return this;
 };
 
@@ -1062,7 +1057,7 @@ ol.inherits(ol.interaction.Measure, ol.interaction.Interaction);
 
 function init() {
     document.removeEventListener('DOMContentLoaded', init);
-    var map = new ol.Map({
+    map = new ol.Map({
         target: 'map',
         layers: [
             new ol.layer.Tile({
@@ -1113,7 +1108,7 @@ function init() {
     var tools = new toolBar({
         map: map,
         target: 'toolbar',
-        layertree: tree,
+        layertree: tree
     }).addControl(new ol.control.Zoom()).addSelectControls().addEditingToolBar();
 
     var measureControl = new ol.control.Interaction({

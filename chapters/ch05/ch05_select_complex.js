@@ -654,6 +654,7 @@ toolBar.prototype.addSelectControls = function () {
         className: 'ol-singleselect ol-unselectable ol-control',
         interaction: selectInteraction
     });
+
     var boxInteraction = new ol.interaction.DragBox();
     var selectMulti = new ol.control.Interaction({
         label: ' ',
@@ -673,6 +674,7 @@ toolBar.prototype.addSelectControls = function () {
             }
         }
     }, this);
+
     var controlDiv = document.createElement('div');
     controlDiv.className = 'ol-deselect ol-unselectable ol-control';
     var controlButton = document.createElement('button');

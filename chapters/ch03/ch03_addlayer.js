@@ -145,7 +145,7 @@ layerTree.prototype.checkWmsLayer = function (form) {
     console.log(url3);
     var url4 = 'http://www.firefly.com:8020/cgi-bin/proxy.py?' + url;
     console.log(url4);
-    request.open('GET', url1, true);
+    request.open('GET', url4, true);
     console.log(request);
     request.send();
 };
