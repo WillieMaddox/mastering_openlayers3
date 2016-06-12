@@ -455,7 +455,7 @@ ol.layer.Vector.prototype.buildHeaders = function () {
     for (var i = 0; i < features.length; i += 1) {
         var attributes = features[i].getProperties();
         for (var j in attributes) {
-            if (typeof attributes[j] !== 'object' && !(j in headers)) {
+            if (typeof attributes[j] !== 'object' && !(j in oldHeaders)) {
                 headers[j] = 'string';
             } else if (j in oldHeaders) {
                 headers[j] = oldHeaders[j];
@@ -544,7 +544,8 @@ layerTree.prototype.styleCategorized = function (layer, attribute) {
 };
 
 layerTree.prototype.randomHexColor = function() {
-    return '#' + Math.floor(Math.random() * 16777215).toString(16);
+    var num = Math.floor(Math.random() * 16777215).toString(16);
+    return '#' + String.prototype.repeat.call('0', 6 - num.length) + num;
 };
 
 var toolBar = function (options) {
