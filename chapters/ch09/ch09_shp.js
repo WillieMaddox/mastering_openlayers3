@@ -80,7 +80,7 @@ var layerTree = function (options) {
                     layer.set('name', this.textContent);
                     layerDiv.classList.add('ol-unselectable');
                     layerDiv.title = this.textContent;
-                    this.scrollTo(0, 0);
+                    this.scrollLeft = 0;
                 }
             });
             var visibleBox = document.createElement('input');
@@ -321,7 +321,6 @@ layerTree.prototype.addVectorLayer = function (form) {
     var layer = new ol.layer.Vector({
         source: source,
         name: form.displayname.value
-
     });
     this.addBufferIcon(layer);
     this.map.addLayer(layer);
